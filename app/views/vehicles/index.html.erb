@@ -1,0 +1,37 @@
+<h1 class="main-text">生まれ年トヨタ車両検索</h1>
+<p class="sub-text">1990年から2024年まで検索可能です!</p>
+<p class="sub-text">※一部年代には登録されていない車両があります。</p>
+
+<div class="search-form">
+  <%= form_tag(vehicles_search_path, method: :post, data: { turbo: false }) do %>
+    <%= label_tag :year, '生まれた年:' %>
+    <%= select_tag :year, options_for_select((1990..2024).to_a), prompt: '選択してください', class: 'btn btn-outline-primary dropdown-toggle btn-sm' %>
+    <%= submit_tag '検索', class: 'btn btn-outline-primary btn-sm' %>
+  <% end %>
+</div>
+
+<div class="search-result">
+  <% if @year.present? %>
+    <h2><%= @year %>年に発売されたトヨタ車両:</h2>
+    <p>検索結果: <%= @vehicles.count %>件</p>
+    <% if @vehicles.any? %>
+      <div class="vehicle-list">
+        <% @vehicles.each do |vehicle| %>
+          <div class="vehicle-item">
+            <h3><%= vehicle.name %></h3>
+            <% if vehicle.image_url.present? %>
+              <%= image_tag vehicle.image_url, alt: vehicle.name, class: 'vehicle-image' %>
+            <% else %>
+              <p>画像がありません</p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p>
+        申し訳ございません。<br/>
+        該当する車両が登録されておりません。
+      </p>
+    <% end %>
+  <% end %>
+</div>
